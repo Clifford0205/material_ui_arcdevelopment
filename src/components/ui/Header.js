@@ -123,7 +123,6 @@ export default function Header(props) {
   const classes = useStyles();
   const theme = useTheme();
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
-  console.log(process);
 
   const matches = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -154,13 +153,50 @@ export default function Header(props) {
   };
 
   const menuOptions = [
-    { name: 'Services', link: '/services' },
-    { name: 'Custom Software Development', link: '/services' },
-    { name: 'Mobile App Development', link: '/mobileapps' },
-    { name: 'Website  Development', link: '/websites' },
+    { name: 'Services', link: '/services', activeIndex: 1, selectedIndex: 0 },
+    {
+      name: 'Custom Software Development',
+      link: '/services',
+      activeIndex: 1,
+      selectedIndex: 1,
+    },
+    {
+      name: 'Mobile App Development',
+      link: '/mobileapps',
+      activeIndex: 1,
+      selectedIndex: 2,
+    },
+    {
+      name: 'Website  Development',
+      link: '/websites',
+      activeIndex: 1,
+      selectedIndex: 3,
+    },
+  ];
+
+  const routes = [
+    { name: 'Home', link: '/', activeIndex: 0 },
+    { name: 'Services', link: '/services', activeIndex: 1 },
+    { name: 'The Revolution', link: '/revolution', activeIndex: 2 },
+    { name: 'About Us', link: '/about', activeIndex: 3 },
+    { name: 'Contact Us', link: '/contact', activeIndex: 4 },
   ];
 
   useEffect(() => {
+    [...menuOptions, ...routes].forEach(route => {
+      switch (window.location.pathname) {
+        case `${route.link}`:
+          if (value !== route.activeIndex) {
+            setValue(route.activeIndex, value);
+            if (route.selectedIndex && route.selectedIndex !== selectedIndex) {
+              setSelectedIndex(route.selectedIndex);
+            }
+          }
+          break;
+        default:
+          break;
+      }
+    });
     // if (window.location.pathname === '/' && value !== 0) {
     //   setValue(0);
     // } else if (window.location.pathname === '/services' && value !== 1) {
@@ -175,60 +211,60 @@ export default function Header(props) {
     //   setValue(5);
     // }
 
-    switch (window.location.pathname) {
-      case '/':
-        if (value !== 0) {
-          setValue(0);
-        }
-        break;
-      case '/services':
-        if (value !== 1) {
-          setValue(1);
-          setSelectedIndex(0);
-        }
-        break;
-      case '/customsoftware':
-        if (value !== 1) {
-          setValue(1);
-          setSelectedIndex(1);
-        }
-        break;
-      case '/mobileapps':
-        if (value !== 1) {
-          setValue(1);
-          setSelectedIndex(2);
-        }
-        break;
-      case '/websites':
-        if (value !== 1) {
-          setValue(1);
-          setSelectedIndex(3);
-        }
-        break;
-      case '/revolution':
-        if (value !== 2) {
-          setValue(2);
-        }
-        break;
-      case '/about':
-        if (value !== 3) {
-          setValue(3);
-        }
-        break;
-      case '/contact':
-        if (value !== 4) {
-          setValue(4);
-        }
-        break;
-      case '/estimate':
-        if (value !== 5) {
-          setValue(5);
-        }
-        break;
-      default:
-        break;
-    }
-  }, [value]);
+    // switch (window.location.pathname) {
+    //   case '/':
+    //     if (value !== 0) {
+    //       setValue(0);
+    //     }
+    //     break;
+    //   case '/services':
+    //     if (value !== 1) {
+    //       setValue(1);
+    //       setSelectedIndex(0);
+    //     }
+    //     break;
+    //   case '/customsoftware':
+    //     if (value !== 1) {
+    //       setValue(1);
+    //       setSelectedIndex(1);
+    //     }
+    //     break;
+    //   case '/mobileapps':
+    //     if (value !== 1) {
+    //       setValue(1);
+    //       setSelectedIndex(2);
+    //     }
+    //     break;
+    //   case '/websites':
+    //     if (value !== 1) {
+    //       setValue(1);
+    //       setSelectedIndex(3);
+    //     }
+    //     break;
+    //   case '/revolution':
+    //     if (value !== 2) {
+    //       setValue(2);
+    //     }
+    //     break;
+    //   case '/about':
+    //     if (value !== 3) {
+    //       setValue(3);
+    //     }
+    //     break;
+    //   case '/contact':
+    //     if (value !== 4) {
+    //       setValue(4);
+    //     }
+    //     break;
+    //   case '/estimate':
+    //     if (value !== 5) {
+    //       setValue(5);
+    //     }
+    //     break;
+    //   default:
+    //     break;
+    // }
+  }, [value, menuOptions, selectedIndex, routes]);
 
   const tabs = (
     <>
