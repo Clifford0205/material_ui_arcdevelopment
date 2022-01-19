@@ -15,6 +15,9 @@ import { useTheme } from '@material-ui/core/styles';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
 import logo from '../../assets/logo.svg';
 
@@ -100,12 +103,27 @@ const useStyles = makeStyles(theme => ({
       backgroundColor: 'transparent',
     },
   },
+  drawer: {
+    backgroundColor: theme.palette.common.blue,
+  },
+  drawerItem: {
+    ...theme.typography.tab,
+    color: 'white',
+    opacity: 0.7,
+  },
+  drawerItemSelected: {
+    opacity: 1,
+  },
+  drawerItemEstimate: {
+    backgroundColor: theme.palette.common.orange,
+  },
 }));
 
 export default function Header(props) {
   const classes = useStyles();
   const theme = useTheme();
-  // const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
+  console.log(process);
 
   const matches = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -288,13 +306,155 @@ export default function Header(props) {
   const drawer = (
     <>
       <SwipeableDrawer
-        // disableBackdropTransition={!iOS}
-        // disableDiscovery={iOS}
+        disableBackdropTransition={!iOS}
+        disableDiscovery={iOS}
         open={openDrawer}
         onClose={() => setOpenDrawer(false)}
         onOpen={() => setOpenDrawer(true)}
+        classes={{ paper: classes.drawer }}
       >
-        Example Drawer
+        {/* disablePadding 讓List跟上方沒距離 */}
+        <List disablePadding>
+          <ListItem
+            onClick={() => {
+              setOpenDrawer(false);
+              setValue(0);
+            }}
+            divider
+            button
+            component={Link}
+            to="/"
+            selected={value === 0}
+          >
+            {/* disableTypography 取消文字的預設值 這裡指改變了字體*/}
+            <ListItemText
+              className={
+                value === 0
+                  ? [classes.drawerItem, classes.drawerItemSelected]
+                  : classes.drawerItem
+              }
+              disableTypography
+            >
+              Home
+            </ListItemText>
+          </ListItem>
+
+          <ListItem
+            onClick={() => {
+              setOpenDrawer(false);
+              setValue(1);
+            }}
+            divider
+            button
+            component={Link}
+            to="/services"
+            selected={value === 1}
+          >
+            <ListItemText
+              className={
+                value === 1
+                  ? [classes.drawerItem, classes.drawerItemSelected]
+                  : classes.drawerItem
+              }
+              disableTypography
+            >
+              Services
+            </ListItemText>
+          </ListItem>
+
+          <ListItem
+            onClick={() => {
+              setOpenDrawer(false);
+              setValue(2);
+            }}
+            divider
+            button
+            component={Link}
+            to="/revolution"
+            selected={value === 2}
+          >
+            <ListItemText
+              className={
+                value === 2
+                  ? [classes.drawerItem, classes.drawerItemSelected]
+                  : classes.drawerItem
+              }
+              disableTypography
+            >
+              The Revolution
+            </ListItemText>
+          </ListItem>
+
+          <ListItem
+            onClick={() => {
+              setOpenDrawer(false);
+              setValue(3);
+            }}
+            divider
+            button
+            component={Link}
+            to="/about"
+            selected={value === 3}
+          >
+            <ListItemText
+              className={
+                value === 3
+                  ? [classes.drawerItem, classes.drawerItemSelected]
+                  : classes.drawerItem
+              }
+              disableTypography
+            >
+              About Us
+            </ListItemText>
+          </ListItem>
+
+          <ListItem
+            onClick={() => {
+              setOpenDrawer(false);
+              setValue(4);
+            }}
+            divider
+            button
+            component={Link}
+            to="/contact"
+            selected={value === 4}
+          >
+            <ListItemText
+              className={
+                value === 4
+                  ? [classes.drawerItem, classes.drawerItemSelected]
+                  : classes.drawerItem
+              }
+              disableTypography
+            >
+              Contact Us
+            </ListItemText>
+          </ListItem>
+
+          <ListItem
+            onClick={() => {
+              setOpenDrawer(false);
+              setValue(5);
+            }}
+            divider
+            button
+            component={Link}
+            to="/estimate"
+            className={classes.drawerItemEstimate}
+            selected={value === 5}
+          >
+            <ListItemText
+              className={
+                value === 5
+                  ? [classes.drawerItem, classes.drawerItemSelected]
+                  : classes.drawerItem
+              }
+              disableTypography
+            >
+              Free Estimate
+            </ListItemText>
+          </ListItem>
+        </List>
       </SwipeableDrawer>
       <IconButton
         className={classes.drawerIconContainer}
