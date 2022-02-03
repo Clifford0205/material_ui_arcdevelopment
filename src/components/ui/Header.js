@@ -176,7 +176,14 @@ export default function Header(props) {
 
   const routes = [
     { name: 'Home', link: '/', activeIndex: 0 },
-    { name: 'Services', link: '/services', activeIndex: 1 },
+    {
+      name: 'Services',
+      link: '/services',
+      activeIndex: 1,
+      ariaOwns: anchorEl ? 'simple-menu' : undefined,
+      ariaPopup: anchorEl ? 'true' : undefined,
+      mouseOver: event => handleClick(event),
+    },
     { name: 'The Revolution', link: '/revolution', activeIndex: 2 },
     { name: 'About Us', link: '/about', activeIndex: 3 },
     { name: 'Contact Us', link: '/contact', activeIndex: 4 },
@@ -274,8 +281,21 @@ export default function Header(props) {
         className={classes.tabContainer}
         indicatorColor="primary"
       >
+        {routes.map((route, index) => (
+          <Tab
+            key={`${route}${index}`}
+            className={classes.tab}
+            component={Link}
+            to={route.link}
+            label={route.name}
+            aria-owns={route.ariaOwns}
+            aria-haspopup={route.ariaPopup}
+            onMouseOver={route.mouseOver}
+          />
+        ))}
         {/* https://v4.mui.com/zh/components/tabs/ */}
-        <Tab className={classes.tab} component={Link} label="Home" to="/"></Tab>
+
+        {/* <Tab className={classes.tab} component={Link} label="Home" to="/"></Tab>
         <Tab
           aria-owns={anchorEl ? 'simple-menu' : undefined}
           aria-haspopup={anchorEl ? 'true' : undefined}
@@ -302,7 +322,7 @@ export default function Header(props) {
           component={Link}
           label="Contact Us"
           to="/contact"
-        ></Tab>
+        ></Tab> */}
       </Tabs>
       <Button variant="contained" color="secondary" className={classes.button}>
         Free Estimate
@@ -318,6 +338,7 @@ export default function Header(props) {
         classes={{ paper: classes.menu }}
         // elevation 差別在陰影
         elevation={0}
+        keepMounted
       >
         {menuOptions.map((option, i) => (
           <MenuItem
@@ -351,145 +372,32 @@ export default function Header(props) {
       >
         {/* disablePadding 讓List跟上方沒距離 */}
         <List disablePadding>
-          <ListItem
-            onClick={() => {
-              setOpenDrawer(false);
-              setValue(0);
-            }}
-            divider
-            button
-            component={Link}
-            to="/"
-            selected={value === 0}
-          >
-            {/* disableTypography 取消文字的預設值 這裡指改變了字體*/}
-            <ListItemText
-              className={
-                value === 0
-                  ? [classes.drawerItem, classes.drawerItemSelected]
-                  : classes.drawerItem
-              }
-              disableTypography
+          {routes.map(route => (
+            <ListItem
+              onClick={() => {
+                setOpenDrawer(false);
+                setValue(route.activeIndex);
+              }}
+              key={`${route}${route.activeIndex}`}
+              divider
+              button
+              component={Link}
+              to={route.link}
+              selected={value === route.activeIndex}
             >
-              Home
-            </ListItemText>
-          </ListItem>
-
-          <ListItem
-            onClick={() => {
-              setOpenDrawer(false);
-              setValue(1);
-            }}
-            divider
-            button
-            component={Link}
-            to="/services"
-            selected={value === 1}
-          >
-            <ListItemText
-              className={
-                value === 1
-                  ? [classes.drawerItem, classes.drawerItemSelected]
-                  : classes.drawerItem
-              }
-              disableTypography
-            >
-              Services
-            </ListItemText>
-          </ListItem>
-
-          <ListItem
-            onClick={() => {
-              setOpenDrawer(false);
-              setValue(2);
-            }}
-            divider
-            button
-            component={Link}
-            to="/revolution"
-            selected={value === 2}
-          >
-            <ListItemText
-              className={
-                value === 2
-                  ? [classes.drawerItem, classes.drawerItemSelected]
-                  : classes.drawerItem
-              }
-              disableTypography
-            >
-              The Revolution
-            </ListItemText>
-          </ListItem>
-
-          <ListItem
-            onClick={() => {
-              setOpenDrawer(false);
-              setValue(3);
-            }}
-            divider
-            button
-            component={Link}
-            to="/about"
-            selected={value === 3}
-          >
-            <ListItemText
-              className={
-                value === 3
-                  ? [classes.drawerItem, classes.drawerItemSelected]
-                  : classes.drawerItem
-              }
-              disableTypography
-            >
-              About Us
-            </ListItemText>
-          </ListItem>
-
-          <ListItem
-            onClick={() => {
-              setOpenDrawer(false);
-              setValue(4);
-            }}
-            divider
-            button
-            component={Link}
-            to="/contact"
-            selected={value === 4}
-          >
-            <ListItemText
-              className={
-                value === 4
-                  ? [classes.drawerItem, classes.drawerItemSelected]
-                  : classes.drawerItem
-              }
-              disableTypography
-            >
-              Contact Us
-            </ListItemText>
-          </ListItem>
-
-          <ListItem
-            onClick={() => {
-              setOpenDrawer(false);
-              setValue(5);
-            }}
-            divider
-            button
-            component={Link}
-            to="/estimate"
-            className={classes.drawerItemEstimate}
-            selected={value === 5}
-          >
-            <ListItemText
-              className={
-                value === 5
-                  ? [classes.drawerItem, classes.drawerItemSelected]
-                  : classes.drawerItem
-              }
-              disableTypography
-            >
-              Free Estimate
-            </ListItemText>
-          </ListItem>
+              {/* disableTypography 取消文字的預設值 這裡指改變了字體*/}
+              <ListItemText
+                className={
+                  value === route.activeIndex
+                    ? [classes.drawerItem, classes.drawerItemSelected]
+                    : classes.drawerItem
+                }
+                disableTypography
+              >
+                {route.name}
+              </ListItemText>
+            </ListItem>
+          ))}
         </List>
       </SwipeableDrawer>
       <IconButton
