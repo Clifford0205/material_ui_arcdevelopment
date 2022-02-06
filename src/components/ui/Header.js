@@ -112,10 +112,15 @@ const useStyles = makeStyles(theme => ({
     opacity: 0.7,
   },
   drawerItemSelected: {
-    opacity: 1,
+    '& .MuiListItemText-root': {
+      opacity: 1,
+    },
   },
   drawerItemEstimate: {
     backgroundColor: theme.palette.common.orange,
+  },
+  appBar: {
+    zIndex: theme.zIndex.modal + 1,
   },
 }));
 
@@ -336,13 +341,14 @@ export default function Header(props) {
         MenuListProps={{ onMouseLeave: handleClose }}
         //   https://v4.mui.com/zh/api/menu/
         classes={{ paper: classes.menu }}
+        style={{ zIndex: 1302 }}
         // elevation 差別在陰影
         elevation={0}
         keepMounted
       >
         {menuOptions.map((option, i) => (
           <MenuItem
-            key={option}
+            key={`${option}${i}`}
             component={Link}
             to={option.link}
             classes={{ root: classes.menuItem }}
@@ -370,6 +376,7 @@ export default function Header(props) {
         onOpen={() => setOpenDrawer(true)}
         classes={{ paper: classes.drawer }}
       >
+        <div className={classes.toolbarMargin} />
         {/* disablePadding 讓List跟上方沒距離 */}
         <List disablePadding>
           {routes.map(route => (
@@ -384,20 +391,34 @@ export default function Header(props) {
               component={Link}
               to={route.link}
               selected={value === route.activeIndex}
+              classes={{ selected: classes.drawerItemSelected }}
             >
               {/* disableTypography 取消文字的預設值 這裡指改變了字體*/}
-              <ListItemText
-                className={
-                  value === route.activeIndex
-                    ? [classes.drawerItem, classes.drawerItemSelected]
-                    : classes.drawerItem
-                }
-                disableTypography
-              >
+              <ListItemText className={classes.drawerItem} disableTypography>
                 {route.name}
               </ListItemText>
             </ListItem>
           ))}
+
+          <ListItem
+            onClick={() => {
+              setOpenDrawer(false);
+              setValue(5);
+            }}
+            divider
+            button
+            component={Link}
+            to="/estimate"
+            classes={{
+              root: classes.drawerItemEstimate,
+              selected: classes.drawerItemSelected,
+            }}
+            selected={value === 5}
+          >
+            <ListItemText className={classes.drawerItem} disableTypography>
+              Free Estimate
+            </ListItemText>
+          </ListItem>
         </List>
       </SwipeableDrawer>
       <IconButton
@@ -414,7 +435,7 @@ export default function Header(props) {
     <>
       {/* https://v4.mui.com/components/app-bar/ */}
       <ElevationScroll>
-        <AppBar>
+        <AppBar className={classes.appBar}>
           {/* 移除 toolbar 左右padding */}
           <Toolbar disableGutters>
             <Button
