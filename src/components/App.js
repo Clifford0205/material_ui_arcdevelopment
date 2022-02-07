@@ -1,4 +1,3 @@
-import Header from '../components/ui/Header';
 import {
   createTheme,
   makeStyles,
@@ -6,6 +5,9 @@ import {
 } from '@material-ui/core/styles';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import theme from './ui/Theme';
+import Header from '../components/ui/Header';
+import Footer from '../components/ui/Footer';
+
 // https://v4.mui.com/zh/customization/theming/
 
 function App() {
@@ -14,7 +16,11 @@ function App() {
       <BrowserRouter>
         <Header />
         <Switch>
-          <Route exact path="/" component={() => <div>Home</div>} />
+          <Route
+            exact
+            path="/"
+            component={() => <div style={{ height: '2000px' }}>Home</div>}
+          />
           <Route exact path="/services" component={() => <div>services</div>} />
           <Route
             exact
@@ -36,6 +42,7 @@ function App() {
           <Route exact path="/contact" component={() => <div>contact</div>} />
           <Route exact path="/estimate" component={() => <div>estimate</div>} />
         </Switch>
+        <Footer />
       </BrowserRouter>
     </ThemeProvider>
   );
